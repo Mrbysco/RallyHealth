@@ -28,7 +28,7 @@ public class RallyHandler {
 			NBTTagCompound playerData = player.getEntityData();
 			Entity trueSource = event.getSource().getTrueSource();
 			
-			if(trueSource != null)
+			if(trueSource != null && !player.world.isRemote)
 			{
 				String damageMob = event.getSource().getTrueSource().getName();
 				float damageAmount = event.getAmount();
@@ -52,7 +52,7 @@ public class RallyHandler {
 				NBTTagCompound playerData = player.getEntityData();
 				Random rand = new Random();
 				
-				if(event.getEntityLiving().getName() == playerData.getString("lastMob"))
+				if(event.getEntityLiving().getName() == playerData.getString("lastMob") && !player.world.isRemote)
 				{
 					if(playerData.getBoolean("atRisk"))
 					{
