@@ -1,0 +1,13 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="https://github.com/Mrbysco/RallyHealth/issues"
+
+[[mods]]
+modId="rallyhealth"
+version="${file.jarVersion}"
+displayName="Rally Health"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/rally-health"
+authors="Mrbysco"
+description='''
+Adds the Rally system from Bloodborne to Minecraft.
+'''

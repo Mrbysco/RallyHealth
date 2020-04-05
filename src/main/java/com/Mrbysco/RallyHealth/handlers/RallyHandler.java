@@ -1,42 +1,41 @@
 
-package com.Mrbysco.RallyHealth.handlers;
+package com.mrbysco.rallyhealth.handlers;
+
+import com.mrbysco.rallyhealth.config.RallyConfig;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 import java.util.Random;
-
-import com.Mrbysco.RallyHealth.config.RallyConfigGen;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class RallyHandler {
 
 	@SubscribeEvent
 	public void DamageHandler(LivingHurtEvent event)
 	{
-		if(event.getEntityLiving() instanceof EntityPlayer)
+		if(event.getEntityLiving() instanceof PlayerEntity)
 		{
-			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-			NBTTagCompound playerData = player.getEntityData();
+			PlayerEntity player = (PlayerEntity)event.getEntityLiving();
+			CompoundNBT playerData = player.getPersistentData();
 			Entity trueSource = event.getSource().getTrueSource();
 			
 			if(trueSource != null && !player.world.isRemote)
 			{
-				String damageMob = event.getSource().getTrueSource().getName();
+				String damageMob = event.getSource().getTrueSource().getEntityString();
 				float damageAmount = event.getAmount();
 				
-				playerData.setFloat("lastDamage", damageAmount);
-				playerData.setBoolean("atRisk", true);
-				playerData.setInteger("riskTime", 0);
-				playerData.setString("lastMob", damageMob);
+				playerData.putFloat("lastDamage", damageAmount);
+				playerData.putBoolean("atRisk", true);
+				playerData.putInt("riskTime", 0);
+				playerData.putString("lastMob", damageMob);
 			}
 		}
 	}
@@ -46,13 +45,13 @@ public class RallyHandler {
 	{
 		if(event.getSource().getDamageType() == "player")
 		{
-			if(event.getSource().getTrueSource() instanceof EntityPlayer)
+			if(event.getSource().getTrueSource() instanceof PlayerEntity)
 			{
-				EntityPlayer player = (EntityPlayer)event.getSource().getTrueSource();
-				NBTTagCompound playerData = player.getEntityData();
+				PlayerEntity player = (PlayerEntity)event.getSource().getTrueSource();
+				CompoundNBT playerData = player.getPersistentData();
 				Random rand = new Random();
 				
-				if(event.getEntityLiving().getName() == playerData.getString("lastMob") && !player.world.isRemote)
+				if(event.getEntityLiving().getEntityString() == playerData.getString("lastMob") && !player.world.isRemote)
 				{
 					if(playerData.getBoolean("atRisk"))
 					{
@@ -61,7 +60,7 @@ public class RallyHandler {
 							float heal = playerData.getFloat("lastDamage");
 							
 							player.heal(heal);
-							playerData.setBoolean("atRisk", false);
+							playerData.putBoolean("atRisk", false);
 						}
 					}
 				}
@@ -74,36 +73,36 @@ public class RallyHandler {
 	{
 		if (event.phase.equals(TickEvent.Phase.START) && event.side.isServer())
 		{
-			EntityPlayer player = event.player;
+			PlayerEntity player = event.player;
 			World world = player.world;
-			MinecraftServer server = world.getMinecraftServer();
-			List<EntityPlayerMP> playerList = server.getPlayerList().getPlayers();
+			MinecraftServer server = world.getServer();
+			List<ServerPlayerEntity> playerList = server.getPlayerList().getPlayers();
 
-			int maxTime = (int) (RallyConfigGen.general.riskTimer * 20);
-			for (EntityPlayer players : playerList)
+			final int maxTime = (int) (RallyConfig.COMMON.riskTimer.get() * 20);
+			for (PlayerEntity players : playerList)
 			{
-				NBTTagCompound playerData = players.getEntityData();
+				CompoundNBT playerData = players.getPersistentData();
 
-				int riskTime = playerData.getInteger("riskTime");
+				int riskTime = playerData.getInt("riskTime");
 				
 				if(playerData.getBoolean("atRisk"))
 				{
 					if(riskTime >= maxTime)
 					{
 						riskTime = 0;
-						playerData.setInteger("riskTime", 0);
-						playerData.setBoolean("atRisk", false);
+						playerData.putInt("riskTime", 0);
+						playerData.putBoolean("atRisk", false);
 					}
 					else
 					{
 						riskTime++;
-						playerData.setInteger("riskTime", riskTime);
+						playerData.putInt("riskTime", riskTime);
 					}
 				}
 				else
 				{
 					riskTime = 0;
-					playerData.setInteger("riskTime", 0);
+					playerData.putInt("riskTime", 0);
 				}
 			}
 		}
