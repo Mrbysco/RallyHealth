@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 public class RallyHandler {
-
+	
 	@SubscribeEvent
 	public void DamageHandler(LivingHurtEvent event)
 	{
