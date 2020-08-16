@@ -34,11 +34,11 @@ public class RallyConfig {
 
 	@SubscribeEvent
 	public static void onLoad(final ModConfig.Loading configEvent) {
-		RallyHealth.logger.debug("Loaded Rally Health config file {}", configEvent.getConfig().getFileName());
+		RallyHealth.logger.debug("Loaded Rally Health's config file {}", configEvent.getConfig().getFileName());
 	}
 
 	@SubscribeEvent
 	public static void onFileChange(final ModConfig.Reloading configEvent) {
-		RallyHealth.logger.debug("Rally Health config just got changed on the file system!");
+		RallyHealth.logger.debug("Rally Health's config just got changed on the file system!");
 	}
 }
