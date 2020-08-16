@@ -18,6 +18,7 @@ public class RallyHealth {
 	public RallyHealth() {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, RallyConfig.commonSpec);
+		eventBus.register(RallyConfig.class);
 
 		MinecraftForge.EVENT_BUS.register(new RallyHandler());
 	}
