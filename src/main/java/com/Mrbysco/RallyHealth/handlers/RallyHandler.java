@@ -3,12 +3,16 @@ package com.mrbysco.rallyhealth.handlers;
 
 import com.mrbysco.rallyhealth.Reference;
 import com.mrbysco.rallyhealth.config.RallyConfig;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.CombatRules;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
@@ -27,13 +31,23 @@ public class RallyHandler {
 		if(!livingEntity.world.isRemote && livingEntity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)event.getEntityLiving();
 			CompoundNBT playerData = player.getPersistentData();
+			DamageSource source = event.getSource();
 			Entity trueSource = event.getSource().getTrueSource();
 			
 			if(trueSource != null) {
 				ResourceLocation mobLoc = trueSource.getType().getRegistryName();
 				String damageMob = mobLoc != null ? mobLoc.toString() : "";
 				float damageAmount = event.getAmount();
-				
+				if (damageAmount <= 0) return;
+
+				if(!source.isUnblockable()) {
+					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, (float)player.getTotalArmorValue(), (float)player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+				}
+				int k = EnchantmentHelper.getEnchantmentModifierDamage(player.getArmorInventoryList(), source);
+				if (k > 0) {
+					damageAmount = CombatRules.getDamageAfterMagicAbsorb(damageAmount, (float)k);
+				}
+
 				playerData.putFloat(Reference.LAST_DAMAGE_TAG, damageAmount);
 				playerData.putBoolean(Reference.AT_RISK_TAG, true);
 				playerData.putInt(Reference.RISK_TIME_TAG, 0);
