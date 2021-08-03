@@ -3,18 +3,18 @@ package com.mrbysco.rallyhealth.handlers;
 
 import com.mrbysco.rallyhealth.Reference;
 import com.mrbysco.rallyhealth.config.RallyConfig;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.CombatRules;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.CombatRules;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -28,9 +28,9 @@ public class RallyHandler {
 	@SubscribeEvent
 	public void DamageHandler(LivingHurtEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
-		if(!livingEntity.level.isClientSide && livingEntity instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity)event.getEntityLiving();
-			CompoundNBT playerData = player.getPersistentData();
+		if(!livingEntity.level.isClientSide && livingEntity instanceof Player) {
+			Player player = (Player)event.getEntityLiving();
+			CompoundTag playerData = player.getPersistentData();
 			DamageSource source = event.getSource();
 			Entity trueSource = event.getSource().getEntity();
 			
@@ -60,9 +60,8 @@ public class RallyHandler {
 	public void livingAttack(LivingAttackEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
 		if(!livingEntity.level.isClientSide && event.getSource().getMsgId().equals("player")) {
-			if(event.getSource().getEntity() instanceof PlayerEntity) {
-				PlayerEntity player = (PlayerEntity)event.getSource().getEntity();
-				CompoundNBT playerData = player.getPersistentData();
+			if(event.getSource().getEntity() instanceof Player player) {
+				CompoundTag playerData = player.getPersistentData();
 				Random rand = new Random();
 
 				ResourceLocation entityLocation = livingEntity.getType().getRegistryName();
@@ -85,29 +84,30 @@ public class RallyHandler {
 	@SubscribeEvent
 	public void riskEvent(TickEvent.PlayerTickEvent event) {
 		if (event.phase.equals(TickEvent.Phase.START) && event.side.isServer()) {
-			PlayerEntity player = event.player;
-			World level = player.level;
+			Player player = event.player;
+			Level level = player.level;
 			MinecraftServer server = level.getServer();
-			List<ServerPlayerEntity> playerList = server.getPlayerList().getPlayers();
+			if(server != null) {
+				List<ServerPlayer> playerList = server.getPlayerList().getPlayers();
 
-			final int maxTime = (int) (RallyConfig.COMMON.riskTimer.get() * 20);
-			for (PlayerEntity players : playerList) {
-				CompoundNBT playerData = players.getPersistentData();
+				final int maxTime = (int) (RallyConfig.COMMON.riskTimer.get() * 20);
+				for (Player players : playerList) {
+					CompoundTag playerData = players.getPersistentData();
 
-				int riskTime = playerData.getInt(Reference.RISK_TIME_TAG);
-				
-				if(playerData.getBoolean(Reference.AT_RISK_TAG)) {
-					if(riskTime >= maxTime) {
-						riskTime = 0;
-						playerData.putInt(Reference.RISK_TIME_TAG, riskTime);
-						playerData.putBoolean(Reference.AT_RISK_TAG, false);
+
+					if(playerData.getBoolean(Reference.AT_RISK_TAG)) {
+						int riskTime = playerData.getInt(Reference.RISK_TIME_TAG);
+						if(riskTime >= maxTime) {
+							riskTime = 0;
+							playerData.putInt(Reference.RISK_TIME_TAG, riskTime);
+							playerData.putBoolean(Reference.AT_RISK_TAG, false);
+						} else {
+							riskTime++;
+							playerData.putInt(Reference.RISK_TIME_TAG, riskTime);
+						}
 					} else {
-						riskTime++;
-						playerData.putInt(Reference.RISK_TIME_TAG, riskTime);
+						playerData.putInt(Reference.RISK_TIME_TAG, 0);
 					}
-				} else {
-					riskTime = 0;
-					playerData.putInt(Reference.RISK_TIME_TAG, riskTime);
 				}
 			}
 		}

@@ -5,7 +5,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class RallyConfig {
@@ -44,12 +44,12 @@ public class RallyConfig {
 	}
 
 	@SubscribeEvent
-	public static void onLoad(final ModConfig.Loading configEvent) {
+	public static void onLoad(final ModConfigEvent.Loading configEvent) {
 		RallyHealth.logger.debug("Loaded Rally Health's config file {}", configEvent.getConfig().getFileName());
 	}
 
 	@SubscribeEvent
-	public static void onFileChange(final ModConfig.Reloading configEvent) {
+	public static void onFileChange(final ModConfigEvent.Reloading configEvent) {
 		RallyHealth.logger.debug("Rally Health's config just got changed on the file system!");
 	}
 }
