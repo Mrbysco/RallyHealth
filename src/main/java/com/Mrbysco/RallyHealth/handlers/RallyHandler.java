@@ -28,11 +28,11 @@ public class RallyHandler {
 	@SubscribeEvent
 	public void DamageHandler(LivingHurtEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
-		if(!livingEntity.world.isRemote && livingEntity instanceof PlayerEntity) {
+		if(!livingEntity.level.isClientSide && livingEntity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity)event.getEntityLiving();
 			CompoundNBT playerData = player.getPersistentData();
 			DamageSource source = event.getSource();
-			Entity trueSource = event.getSource().getTrueSource();
+			Entity trueSource = event.getSource().getEntity();
 			
 			if(trueSource != null) {
 				ResourceLocation mobLoc = trueSource.getType().getRegistryName();
@@ -40,10 +40,10 @@ public class RallyHandler {
 				float damageAmount = event.getAmount();
 				if (damageAmount <= 0) return;
 
-				if(!source.isUnblockable()) {
-					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, (float)player.getTotalArmorValue(), (float)player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+				if(!source.isBypassArmor()) {
+					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, (float)player.getArmorValue(), (float)player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
 				}
-				int k = EnchantmentHelper.getEnchantmentModifierDamage(player.getArmorInventoryList(), source);
+				int k = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), source);
 				if (k > 0) {
 					damageAmount = CombatRules.getDamageAfterMagicAbsorb(damageAmount, (float)k);
 				}
@@ -59,9 +59,9 @@ public class RallyHandler {
 	@SubscribeEvent
 	public void livingAttack(LivingAttackEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
-		if(!livingEntity.world.isRemote && event.getSource().getDamageType().equals("player")) {
-			if(event.getSource().getTrueSource() instanceof PlayerEntity) {
-				PlayerEntity player = (PlayerEntity)event.getSource().getTrueSource();
+		if(!livingEntity.level.isClientSide && event.getSource().getMsgId().equals("player")) {
+			if(event.getSource().getEntity() instanceof PlayerEntity) {
+				PlayerEntity player = (PlayerEntity)event.getSource().getEntity();
 				CompoundNBT playerData = player.getPersistentData();
 				Random rand = new Random();
 
@@ -86,8 +86,8 @@ public class RallyHandler {
 	public void riskEvent(TickEvent.PlayerTickEvent event) {
 		if (event.phase.equals(TickEvent.Phase.START) && event.side.isServer()) {
 			PlayerEntity player = event.player;
-			World world = player.world;
-			MinecraftServer server = world.getServer();
+			World level = player.level;
+			MinecraftServer server = level.getServer();
 			List<ServerPlayerEntity> playerList = server.getPlayerList().getPlayers();
 
 			final int maxTime = (int) (RallyConfig.COMMON.riskTimer.get() * 20);
