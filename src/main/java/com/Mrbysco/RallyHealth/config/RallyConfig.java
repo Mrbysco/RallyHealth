@@ -45,11 +45,11 @@ public class RallyConfig {
 
 	@SubscribeEvent
 	public static void onLoad(final ModConfigEvent.Loading configEvent) {
-		RallyHealth.logger.debug("Loaded Rally Health's config file {}", configEvent.getConfig().getFileName());
+		RallyHealth.LOGGER.debug("Loaded Rally Health's config file {}", configEvent.getConfig().getFileName());
 	}
 
 	@SubscribeEvent
 	public static void onFileChange(final ModConfigEvent.Reloading configEvent) {
-		RallyHealth.logger.debug("Rally Health's config just got changed on the file system!");
+		RallyHealth.LOGGER.debug("Rally Health's config just got changed on the file system!");
 	}
 }
