@@ -18,3 +18,9 @@ mandatory=true
 versionRange="[1.19,1.20)"
 ordering="NONE"
 side="BOTH"
+[[dependencies.rallyhealth]]
+modId="forge"
+mandatory=true
+versionRange="[41.1.0,)"
+ordering="NONE"
+side="BOTH"

@@ -27,15 +27,14 @@ public class RallyHandler {
 
 	@SubscribeEvent
 	public void DamageHandler(LivingHurtEvent event) {
-		LivingEntity livingEntity = event.getEntityLiving();
-		if (!livingEntity.level.isClientSide && livingEntity instanceof Player) {
-			Player player = (Player) event.getEntityLiving();
+		LivingEntity livingEntity = event.getEntity();
+		if (!livingEntity.level.isClientSide && livingEntity instanceof Player player) {
 			CompoundTag playerData = player.getPersistentData();
 			DamageSource source = event.getSource();
 			Entity trueSource = event.getSource().getEntity();
 
 			if (trueSource != null) {
-				ResourceLocation mobLoc = ForgeRegistries.ENTITIES.getKey(trueSource.getType());
+				ResourceLocation mobLoc = ForgeRegistries.ENTITY_TYPES.getKey(trueSource.getType());
 				String damageMob = mobLoc != null ? mobLoc.toString() : "";
 				float damageAmount = event.getAmount();
 				if (damageAmount <= 0) return;
@@ -58,13 +57,13 @@ public class RallyHandler {
 
 	@SubscribeEvent
 	public void livingAttack(LivingAttackEvent event) {
-		LivingEntity livingEntity = event.getEntityLiving();
+		LivingEntity livingEntity = event.getEntity();
 		if (!livingEntity.level.isClientSide && event.getSource().getMsgId().equals("player")) {
 			if (event.getSource().getEntity() instanceof Player player) {
 				CompoundTag playerData = player.getPersistentData();
 				Random rand = new Random();
 
-				ResourceLocation entityLocation = ForgeRegistries.ENTITIES.getKey(livingEntity.getType());
+				ResourceLocation entityLocation = ForgeRegistries.ENTITY_TYPES.getKey(livingEntity.getType());
 				String lastMobString = playerData.getString(Reference.LAST_MOB_TAG);
 				ResourceLocation lastMob = lastMobString.isEmpty() ? null : new ResourceLocation(lastMobString);
 				if (entityLocation != null && entityLocation.equals(lastMob)) {
