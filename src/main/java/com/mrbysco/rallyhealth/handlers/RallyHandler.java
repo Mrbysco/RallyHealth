@@ -24,28 +24,28 @@ import java.util.List;
 import java.util.Random;
 
 public class RallyHandler {
-	
+
 	@SubscribeEvent
 	public void DamageHandler(LivingHurtEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
-		if(!livingEntity.level.isClientSide && livingEntity instanceof Player) {
-			Player player = (Player)event.getEntityLiving();
+		if (!livingEntity.level.isClientSide && livingEntity instanceof Player) {
+			Player player = (Player) event.getEntityLiving();
 			CompoundTag playerData = player.getPersistentData();
 			DamageSource source = event.getSource();
 			Entity trueSource = event.getSource().getEntity();
-			
-			if(trueSource != null) {
+
+			if (trueSource != null) {
 				ResourceLocation mobLoc = trueSource.getType().getRegistryName();
 				String damageMob = mobLoc != null ? mobLoc.toString() : "";
 				float damageAmount = event.getAmount();
 				if (damageAmount <= 0) return;
 
-				if(!source.isBypassArmor()) {
-					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, (float)player.getArmorValue(), (float)player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+				if (!source.isBypassArmor()) {
+					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, (float) player.getArmorValue(), (float) player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
 				}
 				int k = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), source);
 				if (k > 0) {
-					damageAmount = CombatRules.getDamageAfterMagicAbsorb(damageAmount, (float)k);
+					damageAmount = CombatRules.getDamageAfterMagicAbsorb(damageAmount, (float) k);
 				}
 
 				playerData.putFloat(Reference.LAST_DAMAGE_TAG, damageAmount);
@@ -55,23 +55,23 @@ public class RallyHandler {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void livingAttack(LivingAttackEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
-		if(!livingEntity.level.isClientSide && event.getSource().getMsgId().equals("player")) {
-			if(event.getSource().getEntity() instanceof Player player) {
+		if (!livingEntity.level.isClientSide && event.getSource().getMsgId().equals("player")) {
+			if (event.getSource().getEntity() instanceof Player player) {
 				CompoundTag playerData = player.getPersistentData();
 				Random rand = new Random();
 
 				ResourceLocation entityLocation = livingEntity.getType().getRegistryName();
 				String lastMobString = playerData.getString(Reference.LAST_MOB_TAG);
 				ResourceLocation lastMob = lastMobString.isEmpty() ? null : new ResourceLocation(lastMobString);
-				if(entityLocation != null && entityLocation.equals(lastMob)) {
-					if(playerData.getBoolean(Reference.AT_RISK_TAG)) {
-						if(rand.nextInt(10) <= RallyConfig.COMMON.regainChance.get()) {
+				if (entityLocation != null && entityLocation.equals(lastMob)) {
+					if (playerData.getBoolean(Reference.AT_RISK_TAG)) {
+						if (rand.nextInt(10) <= RallyConfig.COMMON.regainChance.get()) {
 							float heal = playerData.getFloat(Reference.LAST_DAMAGE_TAG);
-							int actuallyGained = Math.max(1, (int)(heal * RallyConfig.COMMON.regainPercentage.get()));
+							int actuallyGained = Math.max(1, (int) (heal * RallyConfig.COMMON.regainPercentage.get()));
 							player.heal(actuallyGained);
 							playerData.putBoolean(Reference.AT_RISK_TAG, false);
 						}
@@ -80,14 +80,14 @@ public class RallyHandler {
 			}
 		}
 	}
-		
+
 	@SubscribeEvent
 	public void riskEvent(TickEvent.PlayerTickEvent event) {
 		if (event.phase.equals(TickEvent.Phase.START) && event.side.isServer()) {
 			Player player = event.player;
 			Level level = player.level;
 			MinecraftServer server = level.getServer();
-			if(server != null) {
+			if (server != null) {
 				List<ServerPlayer> playerList = server.getPlayerList().getPlayers();
 
 				final int maxTime = (int) (RallyConfig.COMMON.riskTimer.get() * 20);
@@ -95,9 +95,9 @@ public class RallyHandler {
 					CompoundTag playerData = players.getPersistentData();
 
 
-					if(playerData.getBoolean(Reference.AT_RISK_TAG)) {
+					if (playerData.getBoolean(Reference.AT_RISK_TAG)) {
 						int riskTime = playerData.getInt(Reference.RISK_TIME_TAG);
-						if(riskTime >= maxTime) {
+						if (riskTime >= maxTime) {
 							riskTime = 0;
 							playerData.putInt(Reference.RISK_TIME_TAG, riskTime);
 							playerData.putBoolean(Reference.AT_RISK_TAG, false);
