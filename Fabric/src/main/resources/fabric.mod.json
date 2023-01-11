@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "rallyhealth",
+  "version": "${version}",
+  "name": "Rally Health",
+  "description": "Adds the Rally system from Bloodborne to Minecraft.",
+  "authors": [
+    "Mrbysco"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/rally-health",
+    "issues": "https://github.com/Mrbysco/RallyHealth/issues",
+    "sources": "https://github.com/Mrbysco/RallyHealth"
+  },
+  "license": "MIT",
+  "icon": "assets/modid/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.mrbysco.rallyhealth.RallyHealthFabric"
+    ],
+    "modmenu": [
+      "com.mrbysco.rallyhealth.config.RallyHealthMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "rallyhealth.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric": "*",
+    "minecraft": "1.19.x",
+    "java": ">=17",
+    "cloth-config": ">=8.2.0"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
+  
