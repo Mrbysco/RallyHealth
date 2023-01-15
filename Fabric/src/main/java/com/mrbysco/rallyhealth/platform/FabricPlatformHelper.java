@@ -2,7 +2,7 @@ package com.mrbysco.rallyhealth.platform;
 
 import com.mrbysco.rallyhealth.RallyHealthFabric;
 import com.mrbysco.rallyhealth.platform.services.IPlatformHelper;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 
@@ -10,7 +10,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
 	@Override
 	public ResourceLocation getEntityLocation(EntityType<?> entityType) {
-		return Registry.ENTITY_TYPE.getKey(entityType);
+		return BuiltInRegistries.ENTITY_TYPE.getKey(entityType);
 	}
 
 	@Override
