@@ -2,6 +2,7 @@ package com.mrbysco.rallyhealth;
 
 import com.mrbysco.rallyhealth.platform.Services;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.CombatRules;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -25,7 +26,7 @@ public class CommonClass {
 				float damageAmount = amount;
 				if (damageAmount <= 0) return;
 
-				if (!source.isBypassArmor()) {
+				if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
 					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, (float) player.getArmorValue(),
 							(float) player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
 				}
