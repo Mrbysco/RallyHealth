@@ -15,9 +15,9 @@ import net.minecraft.world.level.Level;
 public class CommonClass {
 
 	public static void onLivingHurt(LivingEntity livingEntity, DamageSource source, float amount) {
-		Level level = livingEntity.level;
+		Level level = livingEntity.level();
 		if (!level.isClientSide && livingEntity instanceof Player player) {
-			RallyData data = RallyData.get(livingEntity.level);
+			RallyData data = RallyData.get(level);
 			Entity trueSource = source.getEntity();
 
 			if (trueSource != null) {
@@ -42,10 +42,10 @@ public class CommonClass {
 	}
 
 	public static void onLivingAttack(LivingEntity livingEntity, DamageSource source) {
-		Level level = livingEntity.level;
+		Level level = livingEntity.level();
 		if (!level.isClientSide && source.getMsgId().equals("player")) {
 			if (source.getEntity() instanceof Player player) {
-				RallyData data = RallyData.get(livingEntity.level);
+				RallyData data = RallyData.get(level);
 				RallyInfo info = data.getInfo(player.getUUID());
 				if (info == null) return;
 
