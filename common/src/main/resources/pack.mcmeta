@@ -1,6 +1,6 @@
 {
     "pack": {
-        "description": "${mod_name} Resources",
-        "pack_format": 15
+        "description": "Rally Health Resources",
+        "pack_format": 18
     }
 }

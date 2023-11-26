@@ -14,7 +14,7 @@ public class RallyConfigFabric implements ConfigData {
 	public static class General {
 
 		@Comment("The amount of time before the risk disables itself (Default: 70)")
-		@ConfigEntry.BoundedDiscrete(min = 1, max = Integer.MAX_VALUE)
+		@ConfigEntry.BoundedDiscrete(min = 1, max = 512)
 		public int riskTimer = 70;
 
 		@Comment("The chance of regaining the damage after striking back [0.7 = 70%] (Default 0.7)")

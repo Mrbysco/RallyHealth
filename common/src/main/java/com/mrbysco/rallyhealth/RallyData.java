@@ -82,6 +82,6 @@ public class RallyData extends SavedData {
 		ServerLevel overworld = level.getServer().getLevel(Level.OVERWORLD);
 
 		DimensionDataStorage storage = overworld.getDataStorage();
-		return storage.computeIfAbsent(RallyData::load, RallyData::new, DATA_NAME);
+		return storage.computeIfAbsent(new SavedData.Factory<>(RallyData::new, RallyData::load, null), DATA_NAME);
 	}
 }

@@ -1,14 +1,14 @@
 package com.mrbysco.rallyhealth;
 
 import com.mrbysco.rallyhealth.config.RallyConfigForge;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 
 @Mod(Constants.MOD_ID)
 public class RallyHealthForge {
@@ -18,8 +18,8 @@ public class RallyHealthForge {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, RallyConfigForge.commonSpec);
 		eventBus.register(RallyConfigForge.class);
 
-		MinecraftForge.EVENT_BUS.addListener(this::onLivingHurt);
-		MinecraftForge.EVENT_BUS.addListener(this::onLivingAttack);
+		NeoForge.EVENT_BUS.addListener(this::onLivingHurt);
+		NeoForge.EVENT_BUS.addListener(this::onLivingAttack);
 	}
 
 	private void onLivingHurt(LivingHurtEvent event) {

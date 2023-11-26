@@ -1,19 +1,19 @@
 package com.mrbysco.rallyhealth.config;
 
 import com.mrbysco.rallyhealth.Constants;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class RallyConfigForge {
 	public static class Common {
-		public final ForgeConfigSpec.IntValue riskTimer;
+		public final ModConfigSpec.IntValue riskTimer;
 		public final DoubleValue regainChance;
 		public final DoubleValue regainPercentage;
 
-		Common(ForgeConfigSpec.Builder builder) {
+		Common(ModConfigSpec.Builder builder) {
 			builder.comment("Rally settings")
 					.push("Common");
 
@@ -33,11 +33,11 @@ public class RallyConfigForge {
 		}
 	}
 
-	public static final ForgeConfigSpec commonSpec;
+	public static final ModConfigSpec commonSpec;
 	public static final Common COMMON;
 
 	static {
-		final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+		final Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
 		commonSpec = specPair.getRight();
 		COMMON = specPair.getLeft();
 	}
