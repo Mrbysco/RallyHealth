@@ -5,7 +5,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingAttackEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
@@ -13,8 +12,7 @@ import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 @Mod(Constants.MOD_ID)
 public class RallyHealthForge {
 
-	public RallyHealthForge() {
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+	public RallyHealthForge(IEventBus eventBus) {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, RallyConfigForge.commonSpec);
 		eventBus.register(RallyConfigForge.class);
 
