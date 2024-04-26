@@ -1,6 +1,6 @@
 package com.mrbysco.rallyhealth.platform;
 
-import com.mrbysco.rallyhealth.config.RallyConfigForge;
+import com.mrbysco.rallyhealth.config.RallyConfigNeoForge;
 import com.mrbysco.rallyhealth.platform.services.IPlatformHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -15,16 +15,16 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
 	@Override
 	public int getRiskTimer() {
-		return RallyConfigForge.COMMON.riskTimer.get();
+		return RallyConfigNeoForge.COMMON.riskTimer.get();
 	}
 
 	@Override
 	public double getRegainChance() {
-		return RallyConfigForge.COMMON.regainChance.get();
+		return RallyConfigNeoForge.COMMON.regainChance.get();
 	}
 
 	@Override
 	public double getRegainPercentage() {
-		return RallyConfigForge.COMMON.regainPercentage.get();
+		return RallyConfigNeoForge.COMMON.regainPercentage.get();
 	}
 }

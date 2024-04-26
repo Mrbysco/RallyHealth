@@ -27,7 +27,7 @@ public class CommonClass {
 				if (damageAmount <= 0) return;
 
 				if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
-					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, (float) player.getArmorValue(),
+					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, source, (float) player.getArmorValue(),
 							(float) player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
 				}
 				int k = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), source);

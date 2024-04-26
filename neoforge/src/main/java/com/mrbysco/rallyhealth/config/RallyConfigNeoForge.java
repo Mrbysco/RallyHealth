@@ -7,7 +7,7 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class RallyConfigForge {
+public class RallyConfigNeoForge {
 	public static class Common {
 		public final ModConfigSpec.IntValue riskTimer;
 		public final DoubleValue regainChance;

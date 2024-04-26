@@ -1,6 +1,7 @@
 package com.mrbysco.rallyhealth;
 
 import com.mrbysco.rallyhealth.platform.Services;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
@@ -19,7 +20,7 @@ public class RallyData extends SavedData {
 	public RallyData() {
 	}
 
-	public static RallyData load(CompoundTag tag) {
+	public static RallyData load(CompoundTag tag, HolderLookup.Provider provider) {
 		infoMap.clear();
 		ListTag infoList = tag.getList("InfoList", CompoundTag.TAG_COMPOUND);
 		for (int i = 0; i < infoList.size(); ++i) {
@@ -34,7 +35,7 @@ public class RallyData extends SavedData {
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag tag) {
+	public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
 		ListTag infoList = new ListTag();
 		for (Map.Entry<UUID, RallyInfo> entry : infoMap.entrySet()) {
 			CompoundTag compoundTag = new CompoundTag();
