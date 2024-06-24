@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[3,)"
+loaderVersion="[4,)"
 issueTrackerURL="https://github.com/Mrbysco/RallyHealth/issues"
 license="MIT"
 
@@ -15,12 +15,12 @@ Adds the Rally system from Bloodborne to Minecraft.
 [[dependencies.rallyhealth]]
 modId="minecraft"
 type="REQUIRED"
-versionRange="[1.20.5,1.21)"
+versionRange="[1.21,1.22)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.rallyhealth]]
 modId="neoforge"
 type="REQUIRED"
-versionRange="[20.5.0-beta,)"
+versionRange="[21.0.31-beta,)"
 ordering="NONE"
 side="BOTH"

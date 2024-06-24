@@ -1,41 +1,27 @@
 package com.mrbysco.rallyhealth;
 
 import com.mrbysco.rallyhealth.platform.Services;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.damagesource.CombatRules;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
 public class CommonClass {
 
-	public static void onLivingHurt(LivingEntity livingEntity, DamageSource source, float amount) {
+	public static void onLivingHurt(LivingEntity livingEntity, DamageSource source, float lostAmount) {
 		Level level = livingEntity.level();
-		if (!level.isClientSide && livingEntity instanceof Player player) {
+		if (level instanceof ServerLevel && livingEntity instanceof Player player) {
 			RallyData data = RallyData.get(level);
 			Entity trueSource = source.getEntity();
 
 			if (trueSource != null) {
-				ResourceLocation mobLoc = Services.PLATFORM.getEntityLocation(trueSource.getType());
+				ResourceLocation mobLoc = BuiltInRegistries.ENTITY_TYPE.getKey(trueSource.getType());
 
-				float damageAmount = amount;
-				if (damageAmount <= 0) return;
-
-				if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) {
-					damageAmount = CombatRules.getDamageAfterAbsorb(damageAmount, source, (float) player.getArmorValue(),
-							(float) player.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
-				}
-				int k = EnchantmentHelper.getDamageProtection(player.getArmorSlots(), source);
-				if (k > 0) {
-					damageAmount = CombatRules.getDamageAfterMagicAbsorb(damageAmount, (float) k);
-				}
-
-				data.putInfo(player.getUUID(), new RallyInfo(level.getGameTime(), damageAmount, mobLoc));
+				data.putInfo(player.getUUID(), new RallyInfo(level.getGameTime(), lostAmount, mobLoc));
 				data.setDirty(true);
 			}
 		}
@@ -49,7 +35,7 @@ public class CommonClass {
 				RallyInfo info = data.getInfo(player.getUUID());
 				if (info == null) return;
 
-				ResourceLocation entityLocation = Services.PLATFORM.getEntityLocation(livingEntity.getType());
+				ResourceLocation entityLocation = BuiltInRegistries.ENTITY_TYPE.getKey(livingEntity.getType());
 				ResourceLocation lastMob = info.mob();
 				boolean withinTime = data.isWithinRiskTimer(player.getUUID(), level.getGameTime());
 				if (entityLocation != null && entityLocation.equals(lastMob)) {
