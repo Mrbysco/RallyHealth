@@ -7,10 +7,6 @@
     "LivingEntityMixin",
     "PlayerMixin"
   ],
-  "client": [
-    "LocalPlayerMixin",
-    "RemotePlayerMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   }
