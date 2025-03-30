@@ -1,12 +1,13 @@
 package com.mrbysco.rallyhealth;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrbysco.rallyhealth.platform.Services;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
 import java.util.HashMap;
@@ -15,37 +16,23 @@ import java.util.UUID;
 
 public class RallyData extends SavedData {
 	private static final String DATA_NAME = Constants.MOD_ID + "_world_data";
-	private static final Map<UUID, RallyInfo> infoMap = new HashMap<>();
+
+	public static final Codec<RallyData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+					Codec.unboundedMap(UUIDUtil.CODEC, RallyInfo.CODEC).fieldOf("infoMap").forGetter(data -> data.infoMap))
+			.apply(inst, RallyData::new));
+
+	private final Map<UUID, RallyInfo> infoMap;
 
 	public RallyData() {
+		this(new HashMap<>());
 	}
 
-	public static RallyData load(CompoundTag tag, HolderLookup.Provider provider) {
-		infoMap.clear();
-		ListTag infoList = tag.getList("InfoList", CompoundTag.TAG_COMPOUND);
-		for (int i = 0; i < infoList.size(); ++i) {
-			CompoundTag compoundTag = infoList.getCompound(i);
-			UUID uuid = compoundTag.getUUID("User");
-			CompoundTag infoTag = compoundTag.getCompound("Info");
-			RallyInfo info = RallyInfo.read(infoTag);
-
-			infoMap.put(uuid, info);
-		}
-		return new RallyData();
+	public RallyData(Map<UUID, RallyInfo> infoMap) {
+		this.infoMap = infoMap;
 	}
 
-	@Override
-	public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
-		ListTag infoList = new ListTag();
-		for (Map.Entry<UUID, RallyInfo> entry : infoMap.entrySet()) {
-			CompoundTag compoundTag = new CompoundTag();
-			compoundTag.putUUID("User", entry.getKey());
-			compoundTag.put("Info", entry.getValue().save(new CompoundTag()));
-			infoList.add(compoundTag);
-		}
-		tag.put("InfoList", infoList);
-
-		return tag;
+	public static SavedDataType<RallyData> type() {
+		return new SavedDataType<>(DATA_NAME, RallyData::new, CODEC, null);
 	}
 
 	public RallyInfo getInfo(UUID uuid) {
@@ -83,6 +70,6 @@ public class RallyData extends SavedData {
 		ServerLevel overworld = level.getServer().getLevel(Level.OVERWORLD);
 
 		DimensionDataStorage storage = overworld.getDataStorage();
-		return storage.computeIfAbsent(new SavedData.Factory<>(RallyData::new, RallyData::load, null), DATA_NAME);
+		return storage.computeIfAbsent(type());
 	}
 }
