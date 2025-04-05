@@ -1,1 +1,1 @@
-* Initial update to 1.21.5
+* Potentially fix a crash related to saving the rally mechanic timing
