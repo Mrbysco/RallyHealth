@@ -1,5 +1,6 @@
 package com.mrbysco.rallyhealth;
 
+import com.google.common.collect.Maps;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mrbysco.rallyhealth.platform.Services;
@@ -24,11 +25,11 @@ public class RallyData extends SavedData {
 	private final Map<UUID, RallyInfo> infoMap;
 
 	public RallyData() {
-		this(new HashMap<>());
+		this(Maps.newHashMap());
 	}
 
 	public RallyData(Map<UUID, RallyInfo> infoMap) {
-		this.infoMap = infoMap;
+		this.infoMap = Maps.newHashMap(infoMap);
 	}
 
 	public static SavedDataType<RallyData> type() {
