@@ -2,10 +2,7 @@ package com.mrbysco.rallyhealth;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-
-import java.util.Objects;
 
 public record RallyInfo(long time, float damage, ResourceLocation mob) {
 	public static final Codec<RallyInfo> CODEC = RecordCodecBuilder.create(inst ->
@@ -13,9 +10,4 @@ public record RallyInfo(long time, float damage, ResourceLocation mob) {
 							Codec.FLOAT.fieldOf("damage").forGetter(RallyInfo::damage),
 							ResourceLocation.CODEC.fieldOf("mob").forGetter(RallyInfo::mob))
 					.apply(inst, RallyInfo::new));
-
-
-	public RallyInfo(long time, float damage, String mobString) {
-		this(time, damage, ResourceLocation.tryParse(mobString));
-	}
 }
