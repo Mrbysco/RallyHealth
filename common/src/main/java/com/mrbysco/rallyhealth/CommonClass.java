@@ -2,7 +2,7 @@ package com.mrbysco.rallyhealth;
 
 import com.mrbysco.rallyhealth.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -19,7 +19,7 @@ public class CommonClass {
 			Entity trueSource = source.getEntity();
 
 			if (trueSource != null) {
-				ResourceLocation mobLoc = BuiltInRegistries.ENTITY_TYPE.getKey(trueSource.getType());
+				Identifier mobLoc = BuiltInRegistries.ENTITY_TYPE.getKey(trueSource.getType());
 
 				data.putInfo(player.getUUID(), new RallyInfo(level.getGameTime(), lostAmount, mobLoc));
 				data.setDirty(true);
@@ -35,8 +35,8 @@ public class CommonClass {
 				RallyInfo info = data.getInfo(player.getUUID());
 				if (info == null) return;
 
-				ResourceLocation entityLocation = BuiltInRegistries.ENTITY_TYPE.getKey(livingEntity.getType());
-				ResourceLocation lastMob = info.mob();
+				Identifier entityLocation = BuiltInRegistries.ENTITY_TYPE.getKey(livingEntity.getType());
+				Identifier lastMob = info.mob();
 				boolean withinTime = data.isWithinRiskTimer(player.getUUID(), level.getGameTime());
 				if (entityLocation != null && entityLocation.equals(lastMob)) {
 					if (withinTime) {
