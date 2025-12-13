@@ -15,7 +15,7 @@ public class RallyConfigNeoForge {
 
 		Common(ModConfigSpec.Builder builder) {
 			builder.comment("Rally settings")
-					.push("Common");
+					.push("general");
 
 			riskTimer = builder
 					.comment("The amount of time before the risk disables itself (Default: 70)")

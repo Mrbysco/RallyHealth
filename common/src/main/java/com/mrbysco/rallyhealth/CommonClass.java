@@ -29,7 +29,7 @@ public class CommonClass {
 
 	public static void onLivingAttack(LivingEntity livingEntity, DamageSource source) {
 		Level level = livingEntity.level();
-		if (!level.isClientSide && source.getMsgId().equals("player")) {
+		if (!level.isClientSide() && source.getMsgId().equals("player")) {
 			if (source.getEntity() instanceof Player player) {
 				RallyData data = RallyData.get(level);
 				RallyInfo info = data.getInfo(player.getUUID());

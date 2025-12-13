@@ -3,5 +3,9 @@
   "text.autoconfig.rallyhealth.option.general": "General",
   "text.autoconfig.rallyhealth.option.general.riskTimer": "Risk Timer",
   "text.autoconfig.rallyhealth.option.general.regainChance": "Regain Chance",
-  "text.autoconfig.rallyhealth.option.general.regainPercentage": "Regain Percentage"
+  "text.autoconfig.rallyhealth.option.general.regainPercentage": "Regain Percentage",
+  "rallyhealth.configuration.general": "General",
+  "rallyhealth.configuration.riskTimer": "Risk Timer",
+  "rallyhealth.configuration.regainChance": "Regain Chance",
+  "rallyhealth.configuration.regainPercentage": "Regain Percentage"
 }
