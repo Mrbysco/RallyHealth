@@ -1,1 +1,1 @@
-* Initial update to 1.21.11
+* Fix codec used to save the rally health data
