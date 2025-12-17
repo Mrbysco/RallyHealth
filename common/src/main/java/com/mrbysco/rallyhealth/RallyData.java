@@ -19,7 +19,7 @@ public class RallyData extends SavedData {
 	private static final String DATA_NAME = Constants.MOD_ID + "_world_data";
 
 	public static final Codec<RallyData> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-					Codec.unboundedMap(UUIDUtil.CODEC, RallyInfo.CODEC).fieldOf("infoMap").forGetter(data -> data.infoMap))
+					Codec.unboundedMap(UUIDUtil.STRING_CODEC, RallyInfo.CODEC).fieldOf("infoMap").forGetter(data -> data.infoMap))
 			.apply(inst, RallyData::new));
 
 	private final Map<UUID, RallyInfo> infoMap;
