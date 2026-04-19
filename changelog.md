@@ -1,1 +1,1 @@
-* Fix codec used to save the rally health data
+* Update to 26.1.2
