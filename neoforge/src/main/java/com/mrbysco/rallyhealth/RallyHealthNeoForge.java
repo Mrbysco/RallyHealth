@@ -1,8 +1,7 @@
 package com.mrbysco.rallyhealth;
 
-import com.mrbysco.rallyhealth.config.RallyConfigNeoForge;
+import com.mrbysco.rallyhealth.config.RallyConfig;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
@@ -15,9 +14,8 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 @Mod(Constants.MOD_ID)
 public class RallyHealthNeoForge {
 
-	public RallyHealthNeoForge(IEventBus eventBus, Dist dist, ModContainer container) {
-		container.registerConfig(ModConfig.Type.COMMON, RallyConfigNeoForge.commonSpec);
-		eventBus.register(RallyConfigNeoForge.class);
+	public RallyHealthNeoForge(Dist dist, ModContainer container) {
+		container.registerConfig(ModConfig.Type.COMMON, RallyConfig.commonSpec);
 
 		NeoForge.EVENT_BUS.addListener(this::onLivingHurt);
 		NeoForge.EVENT_BUS.addListener(this::onLivingAttack);

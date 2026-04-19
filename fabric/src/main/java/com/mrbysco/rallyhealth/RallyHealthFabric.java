@@ -1,10 +1,8 @@
 package com.mrbysco.rallyhealth;
 
 import com.mrbysco.rallyhealth.callback.LivingCallback;
-import com.mrbysco.rallyhealth.config.RallyConfigFabric;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import com.mrbysco.rallyhealth.config.RallyConfig;
+import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -14,13 +12,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.neoforged.fml.config.ModConfig;
 
 public class RallyHealthFabric implements ModInitializer {
-	public static ConfigHolder<RallyConfigFabric> config;
 
 	@Override
 	public void onInitialize() {
-		config = AutoConfig.register(RallyConfigFabric.class, Toml4jConfigSerializer::new);
+		ConfigRegistry.INSTANCE.register(Constants.MOD_ID, ModConfig.Type.COMMON, RallyConfig.commonSpec);
 
 		LivingCallback.HURT_EVENT.register((living, source, amount) -> {
 			Level level = living.level();

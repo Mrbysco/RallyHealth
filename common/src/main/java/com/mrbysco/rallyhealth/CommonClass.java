@@ -1,6 +1,6 @@
 package com.mrbysco.rallyhealth;
 
-import com.mrbysco.rallyhealth.platform.Services;
+import com.mrbysco.rallyhealth.config.RallyConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -40,9 +40,9 @@ public class CommonClass {
 				boolean withinTime = data.isWithinRiskTimer(player.getUUID(), level.getGameTime());
 				if (entityLocation != null && entityLocation.equals(lastMob)) {
 					if (withinTime) {
-						if (level.random.nextDouble() <= Services.PLATFORM.getRegainChance()) {
+						if (level.getRandom().nextDouble() <= RallyConfig.COMMON.regainChance.get()) {
 							float heal = info.damage();
-							int actuallyGained = Math.max(1, (int) (heal * Services.PLATFORM.getRegainPercentage()));
+							int actuallyGained = Math.max(1, (int) (heal * RallyConfig.COMMON.regainPercentage.get()));
 							player.heal(actuallyGained);
 							data.removeInfo(player.getUUID());
 							data.setDirty(true);

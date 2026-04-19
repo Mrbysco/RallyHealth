@@ -1,13 +1,10 @@
 package com.mrbysco.rallyhealth.config;
 
-import com.mrbysco.rallyhealth.Constants;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class RallyConfigNeoForge {
+public class RallyConfig {
 	public static class Common {
 		public final ModConfigSpec.IntValue riskTimer;
 		public final DoubleValue regainChance;
@@ -40,15 +37,5 @@ public class RallyConfigNeoForge {
 		final Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
 		commonSpec = specPair.getRight();
 		COMMON = specPair.getLeft();
-	}
-
-	@SubscribeEvent
-	public static void onLoad(final ModConfigEvent.Loading configEvent) {
-		Constants.LOGGER.debug("Loaded Rally Health's config file {}", configEvent.getConfig().getFileName());
-	}
-
-	@SubscribeEvent
-	public static void onFileChange(final ModConfigEvent.Reloading configEvent) {
-		Constants.LOGGER.debug("Rally Health's config just got changed on the file system!");
 	}
 }
