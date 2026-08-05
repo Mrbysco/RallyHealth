@@ -20,15 +20,15 @@ public class PlayerMixin {
 			target = "Lnet/minecraft/world/entity/player/Player;getDamageAfterArmorAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F",
 			shift = At.Shift.BEFORE,
 			ordinal = 0), cancellable = true)
-	public void actuallyHurt(ServerLevel serverLevel, DamageSource damageSource, float amount, CallbackInfo ci) {
-		if (LivingCallback.HURT_EVENT.invoker().hurt((LivingEntity) (Object) this, damageSource, amount) == InteractionResult.FAIL) {
+	public void actuallyHurt(ServerLevel level, DamageSource source, float dmg, CallbackInfo ci) {
+		if (LivingCallback.HURT_EVENT.invoker().hurt((LivingEntity) (Object) this, source, dmg) == InteractionResult.FAIL) {
 			ci.cancel();
 		}
 	}
 
 	@Inject(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
-	public void hurt(ServerLevel serverLevel, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
-		if (LivingCallback.ATTACK_EVENT.invoker().attack((LivingEntity) (Object) this, damageSource, amount) == InteractionResult.FAIL) {
+	public void hurt(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+		if (LivingCallback.ATTACK_EVENT.invoker().attack((LivingEntity) (Object) this, source, damage) == InteractionResult.FAIL) {
 			cir.setReturnValue(false);
 		}
 	}
