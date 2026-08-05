@@ -26,7 +26,7 @@ public class RallyHealthNeoForge {
 	}
 
 	private void onLivingHurt(LivingDamageEvent.Post event) {
-		CommonClass.onLivingHurt(event.getEntity(), event.getSource(), event.getNewDamage());
+		CommonClass.onLivingHurt(event.getEntity(), event.getSource(), event.getInflictedDamage());
 	}
 
 	private void onLivingAttack(LivingIncomingDamageEvent event) {
